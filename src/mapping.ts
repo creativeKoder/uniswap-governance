@@ -167,11 +167,12 @@ export function handleDelegateChanged(event: DelegateChanged): void {
   );
   let delegateChangeEvent = getOrCreateDelegateChangedEvent(
     event.params.delegator.toHexString()
+    .concat("-")
+    .concat(event.transaction.hash.toHex())
   );
 
   let newDelegate = getOrCreateDelegate(event.params.toDelegate.toHexString());
 
-  newDelegate.save();
 
   delegateChangeEvent.tokenHolder = tokenHolder.id;
   delegateChangeEvent.delegate = newDelegate.id;
@@ -179,14 +180,15 @@ export function handleDelegateChanged(event: DelegateChanged): void {
   delegateChangeEvent.save();
 
   tokenHolder.delegate = newDelegate.id;
-  tokenHolder.delegateChangedEvents.push(delegateChangeEvent.id);
-  tokenHolder.save();
+  // tokenHolder.delegateChangedEvents.push(delegateChangeEvent.id);
 
   previousDelegate.tokenHoldersRepresentedAmount =
     previousDelegate.tokenHoldersRepresentedAmount - 1;
   newDelegate.tokenHoldersRepresentedAmount =
     newDelegate.tokenHoldersRepresentedAmount + 1;
   previousDelegate.save();
+  newDelegate.save();
+  tokenHolder.save();
 }
 
 // - event: DelegateVotesChanged(indexed address,uint256,uint256)

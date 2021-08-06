@@ -13,7 +13,7 @@ type TokenHolder @entity {
   "Delegate address of the token holder which will participate in votings. Delegates don't need to hold any tokens and can even be the token holder itself."
   delegate: Delegate
 
-  delegateChangedEvents: [DelegateChangedEvent!] 
+  delegateChangedEvents: [DelegateChangedEvent!] @derivedFrom(field: "tokenHolder")
 
   "Uniswap Token balance of this address expressed in the smallest unit of the UniswapToken"
   tokenBalanceRaw: BigInt!
